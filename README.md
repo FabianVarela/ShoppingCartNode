@@ -1,2 +1,2 @@
-# ShoppingCarNode
-Shopping car and CMS made with Node JS
+# ShoppingCartNode
+Shopping cart and CMS made with Node JS
