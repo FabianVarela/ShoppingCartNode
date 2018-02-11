@@ -24,7 +24,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //  routes
 app.get('/', function (req, res) {
-    res.send(`its working`);
+    res.render('index');
 });
 
 //  start the app
