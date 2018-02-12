@@ -1,7 +1,7 @@
 <%- include('../_layouts/adminheader') %>
     <h2 class="page-title">Pages</h2>
 
-    <a href="/admin/add" class="btn btn-primary">Add a new page</a>
+    <a href="/adminPages/add" class="btn btn-primary">Add a new page</a>
 
     <br/>
     <br/>
@@ -16,12 +16,12 @@
         </thead>
         <tbody>
             <% pages.forEach(function(page) { %>
-                <tr id="id_<%= page._id %>" class="<%= page._slug %>">
+                <tr id="id_<%= page._id %>" class="<%= page.slug %>">
                     <td>
                         <%= page.title %>
                     </td>
                     <td>
-                        <a href="/admin/edit/<%= page.slug %>">Edit</a>
+                        <a href="/adminPages/edit/<%= page.id %>">Edit</a>
                     </td>
 
                     <% if(page.slug == 'home') { %>
@@ -29,7 +29,7 @@
                         </td>
                     <% } else { %>
                         <td>
-                            <a class="confirmDeletion" href="/admin/delete/<%= page._id %>">Delete</a>
+                            <a class="confirmDeletion" href="/adminPages/delete/<%= page._id %>">Delete</a>
                         </td>
                     <% } %>
                 </tr>
@@ -45,7 +45,7 @@
             placeholder: "ui-state-highlight",
             update: function () {
                 var ids = $('tbody').sortable("serialize");
-                var url = "/admin/pages/reorder-pages";
+                var url = "/adminPages/pages/reorder-pages";
 
                 $.post(url, ids);
             }

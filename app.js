@@ -72,7 +72,7 @@ app.use(function (req, res, next) {
 
 //  set routes
 app.use('/', routes);
-app.use('/admin', routesAdmin);
+app.use('/adminPages', routesAdmin);
 
 //  start the app
 var port = process.env.PORT || 3000;

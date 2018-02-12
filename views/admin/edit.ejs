@@ -1,12 +1,12 @@
 <%- include('../_layouts/adminheader') %>
     <h2 class="page-title">Edit a page</h2>
 
-    <a href="/admin/pages" class="btn btn-primary">Back to all pages</a>
+    <a href="/adminPages/pages" class="btn btn-primary">Back to all pages</a>
 
     <br/>
     <br/>
 
-    <form method="POST" action="/admin/edit/<%= slug %>">
+    <form method="POST" action="/adminPages/edit/<%= id %>">
         <div class="form-group">
             <label for="">Title</label>
             <input type="text" class="form-control" name="title" value="<%= title %>" placeholder="Title" />
