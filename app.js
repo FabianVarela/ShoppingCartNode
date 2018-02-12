@@ -9,6 +9,7 @@ var messages = require('express-messages');
 var config = require('./config/database');
 var routes = require('./routes/pages');
 var routesAdmin = require('./routes/admin_pages');
+var routesCategory = require('./routes/admin_categories');
 
 //  connect to mongo.
 mongoose.connect(config.database);
@@ -73,6 +74,7 @@ app.use(function (req, res, next) {
 //  set routes
 app.use('/', routes);
 app.use('/adminPages', routesAdmin);
+app.use('/adminCategories', routesCategory);
 
 //  start the app
 var port = process.env.PORT || 3000;
