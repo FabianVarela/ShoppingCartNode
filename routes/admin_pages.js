@@ -13,9 +13,8 @@ router.get('/pages', function (req, res) {
     });
 });
 
-//  POST reorder pages
-router.post('/pages/reorder-pages', function (req, res) {
-    var ids = req.body['id[]'];
+//  Sort pages
+function sortPages(ids, callback) {
     var count = 0;
 
     for (var i = 0; i < ids.length; i++) {
@@ -29,10 +28,29 @@ router.post('/pages/reorder-pages', function (req, res) {
                 page.save(function (error) {
                     if (error)
                         return console.log(error);
+
+                    ++count;
+
+                    if (count >= ids.length)
+                        callback();
                 });
             });
         })(count);
     }
+}
+
+//  POST reorder pages
+router.post('/pages/reorder-pages', function (req, res) {
+    var ids = req.body['id[]'];
+
+    sortPages(ids, function () {
+        Page.find({}).sort({ sorting: 1 }).exec(function (error, pages) {
+            if (error)
+                console.log(error);
+            else
+                req.app.locals.pages = pages;
+        });
+    });
 });
 
 //  GET add page
@@ -90,6 +108,13 @@ router.post('/add', function (req, res) {
                 newPage.save(function (error) {
                     if (error)
                         return console.log(error);
+
+                    Page.find({}).sort({ sorting: 1 }).exec(function (error, pages) {
+                        if (error)
+                            console.log(error);
+                        else
+                            req.app.locals.pages = pages;
+                    });
 
                     req.flash('success', 'Page added!!');
                     res.redirect('/adminPages/pages');
@@ -161,6 +186,13 @@ router.post('/edit/:id', function (req, res) {
                         if (error)
                             return console.log(error);
 
+                        Page.find({}).sort({ sorting: 1 }).exec(function (error, pages) {
+                            if (error)
+                                console.log(error);
+                            else
+                                req.app.locals.pages = pages;
+                        });
+
                         req.flash('success', 'Page edited!!');
                         res.redirect('/adminPages/edit/' + page._id);
                     });
@@ -175,6 +207,13 @@ router.get('/delete/:id', function (req, res) {
     Page.findByIdAndRemove(req.params.id, function (error) {
         if (error)
             return console.log(error);
+
+        Page.find({}).sort({ sorting: 1 }).exec(function (error, pages) {
+            if (error)
+                console.log(error);
+            else
+                req.app.locals.pages = pages;
+        });
 
         req.flash('success', 'Page deleted!!');
         res.redirect('/adminPages/pages');
