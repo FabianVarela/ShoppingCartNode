@@ -4,7 +4,7 @@ $(function () {
     }
 
     $('a.confirmDeletion').on('click', function (e) {
-        if (!confirm('Are you sure to delete this page?'))
+        if (!confirm('Are you sure to delete this element?'))
             return false;
     });
 });

@@ -6,10 +6,12 @@ var session = require('express-session');
 var expressValidator = require('express-validator');
 var connectFlash = require('connect-flash');
 var messages = require('express-messages');
+var fileUpload = require('express-fileupload');
 var config = require('./config/database');
 var routes = require('./routes/pages');
 var routesAdmin = require('./routes/admin_pages');
 var routesCategory = require('./routes/admin_categories');
+var routesProduct = require('./routes/admin_products');
 
 //  connect to mongo.
 mongoose.connect(config.database);
@@ -32,6 +34,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //  set global errors
 app.locals.errors = null;
+
+//  set file upload middleware
+app.use(fileUpload());
 
 //  set body parser middleware
 app.use(parser.urlencoded({ extended: false }));
@@ -61,6 +66,24 @@ app.use(expressValidator({
             msg: msg,
             value: value
         };
+    },
+    customValidators: {
+        isImage: function (value, filename) {
+            var extension = (path.extname(filename)).toLowerCase();
+
+            switch (extension) {
+                case '.jpg':
+                    return '.jpg';
+                case '.png':
+                    return '.png'
+                case '.jpeg':
+                    return '.jpeg'
+                case '':
+                    return '.jpg'
+                default:
+                    return false;
+            }
+        }
     }
 }));
 
@@ -75,6 +98,7 @@ app.use(function (req, res, next) {
 app.use('/', routes);
 app.use('/adminPages', routesAdmin);
 app.use('/adminCategories', routesCategory);
+app.use('/adminProducts', routesProduct);
 
 //  start the app
 var port = process.env.PORT || 3000;

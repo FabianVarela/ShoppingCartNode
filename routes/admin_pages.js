@@ -58,7 +58,7 @@ router.post('/add', function (req, res) {
     var content = req.body.content;
 
     if (slug == '')
-        slug = title.replace(/\s+/g, '-').toLowerCase()
+        slug = title.replace(/\s+/g, '-').toLowerCase();
 
     var errors = req.validationErrors();
 
