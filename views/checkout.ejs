@@ -39,14 +39,51 @@
             </tr>
             <tr>
                 <td colspan="5" align="right">
-                    <a class="btn btn-danger" href="/cart/clear">Clear cart</a>
+                    <a class="clearcart btn btn-danger" href="/cart/clear">Clear cart</a>
                 </td>
                 <td colspan="5" align="right">
                     <a class="btn btn-primary buynow" href="#">Buy now</a>
                 </td>
             </tr>
         </table>
+
+        <form class="pp" action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="POST">
+            <input type="hidden" name="cmd" value="_cart" />
+            <input type="hidden" name="upload" value="1" />
+            <input type="hidden" name="business" value="jfabian.303@gmail.com" />
+
+            <% var num = 0; %>
+            <% cart.forEach(function(item) { %>
+                <% num++ %>
+
+                <input type="hidden" name="item_name_<%= num %>" value="<%= item.title %>" />
+                <input type="hidden" name="amount_<%= num %>" value="<%= item.price %>" />
+                <input type="hidden" name="quantity_<%= num %>" value="<%= item.qty %>" />
+            <% }); %>
+
+            <input type="hidden" name="currency_code" value="USD" />
+            <input type="hidden" name="amount" value="<%= total %>" />
+            <input type="image" src="http://www.paypal.com/en_US/i/btn/x-click-but01.gif" name="submit" value="Make payments with paypal - it's fast, free and secure!" />
+        </form>
     <% } else { %>
         <h3 class="text-center">Your cart is empty.</h3>
     <% } %>
+
+    <script>
+        $(function(){
+            $('a.clearcart').on('click', function(){
+                if(!confirm('Confirm clear cart?'))
+                    return false;
+            });
+
+            $('a.buynow').on('click', function (e) {
+                e.preventDefault();
+
+                $.get('/cart/buynow', function () {
+                    $('form.pp input[type=image]').click();
+                    $('.ajaxBg').show();
+                });
+            });
+        });
+    </script>
 <% include _layouts/footer %>
