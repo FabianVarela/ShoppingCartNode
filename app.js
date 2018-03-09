@@ -9,9 +9,10 @@ var messages = require('express-messages');
 var fileUpload = require('express-fileupload');
 var config = require('./config/database');
 var routes = require('./routes/pages');
-var routesAdmin = require('./routes/admin_pages');
-var routesCategory = require('./routes/admin_categories');
-var routesProduct = require('./routes/admin_products');
+var routesProduct = require('./routes/products');
+var routesAdminPages = require('./routes/admin_pages');
+var routesAdminCategory = require('./routes/admin_categories');
+var routesAdminProduct = require('./routes/admin_products');
 
 //  connect to mongo.
 mongoose.connect(config.database);
@@ -40,11 +41,21 @@ var Page = require('./models/page');
 
 //  get all pages to pass to header.ejs
 Page.find({}).sort({ sorting: 1 }).exec(function (error, pages) {
-    if (error) {
+    if (error)
         console.log(error);
-    } else {
+    else
         app.locals.pages = pages;
-    }
+});
+
+//  get the category model
+var Category = require('./models/category');
+
+//  get all categories to pass to header.ejs
+Category.find(function (error, categories) {
+    if (error)
+        console.log(error);
+    else
+        app.locals.categories = categories;
 });
 
 //  set file upload middleware
@@ -69,9 +80,8 @@ app.use(expressValidator({
             root = namespace.shift(),
             formParam = root;
 
-        while (namespace.length) {
+        while (namespace.length)
             formParam += '[' + namespace.shift() + ']';
-        }
 
         return {
             param: formParam,
@@ -108,9 +118,10 @@ app.use(function (req, res, next) {
 
 //  set routes
 app.use('/', routes);
-app.use('/adminPages', routesAdmin);
-app.use('/adminCategories', routesCategory);
-app.use('/adminProducts', routesProduct);
+app.use('/products', routesProduct)
+app.use('/adminPages', routesAdminPages);
+app.use('/adminCategories', routesAdminCategory);
+app.use('/adminProducts', routesAdminProduct);
 
 //  start the app
 var port = process.env.PORT || 3000;

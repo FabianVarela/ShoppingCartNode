@@ -7,4 +7,8 @@ $(function () {
         if (!confirm('Are you sure to delete this element?'))
             return false;
     });
+
+    if ($("[data-fancybox]").length) {
+        $("[data-fancybox]").fancybox();
+    }
 });
