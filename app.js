@@ -10,6 +10,7 @@ var fileUpload = require('express-fileupload');
 var config = require('./config/database');
 var routes = require('./routes/pages');
 var routesProduct = require('./routes/products');
+var routesCart = require('./routes/cart');
 var routesAdminPages = require('./routes/admin_pages');
 var routesAdminCategory = require('./routes/admin_categories');
 var routesAdminProduct = require('./routes/admin_products');
@@ -116,9 +117,15 @@ app.use(function (req, res, next) {
     next();
 });
 
+app.get('*', function (req, res, next) {
+    res.locals.cart = req.session.cart;
+    next();
+});
+
 //  set routes
 app.use('/', routes);
-app.use('/products', routesProduct)
+app.use('/products', routesProduct);
+app.use('/cart', routesCart);
 app.use('/adminPages', routesAdminPages);
 app.use('/adminCategories', routesAdminCategory);
 app.use('/adminProducts', routesAdminProduct);
