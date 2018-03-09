@@ -11,9 +11,12 @@ var config = require('./config/database');
 var routes = require('./routes/pages');
 var routesProduct = require('./routes/products');
 var routesCart = require('./routes/cart');
+var routesUser = require('./routes/users');
 var routesAdminPages = require('./routes/admin_pages');
 var routesAdminCategory = require('./routes/admin_categories');
 var routesAdminProduct = require('./routes/admin_products');
+var passport = require('passport');
+var passportConfig = require('./config/passport');
 
 //  connect to mongo.
 mongoose.connect(config.database);
@@ -117,8 +120,16 @@ app.use(function (req, res, next) {
     next();
 });
 
+//  Config passport
+passportConfig(passport);
+
+//  Set passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.get('*', function (req, res, next) {
     res.locals.cart = req.session.cart;
+    res.locals.user = req.user || null;
     next();
 });
 
@@ -126,6 +137,7 @@ app.get('*', function (req, res, next) {
 app.use('/', routes);
 app.use('/products', routesProduct);
 app.use('/cart', routesCart);
+app.use('/user', routesUser);
 app.use('/adminPages', routesAdminPages);
 app.use('/adminCategories', routesAdminCategory);
 app.use('/adminProducts', routesAdminProduct);
