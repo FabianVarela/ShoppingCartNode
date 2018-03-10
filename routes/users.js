@@ -13,7 +13,7 @@ router.get('/register', function (req, res) {
 });
 
 //  POST register an user
-router.get('/register', function (req, res) {
+router.post('/register', function (req, res) {
     var name = req.body.name;
     var email = req.body.email;
     var username = req.body.username;
@@ -63,7 +63,7 @@ router.get('/register', function (req, res) {
                             if (error) {
                                 console.log(error);
                             } else {
-                                req.flash('succes', 'You are now registered');
+                                req.flash('success', 'You are now registered');
                                 res.redirect('/user/login');
                             }
                         });
@@ -72,7 +72,25 @@ router.get('/register', function (req, res) {
             }
         });
     }
+});
 
+//  GET login
+router.get('/login', function (req, res) {
+    if (res.locals.user)
+        res.redirect('/');
+
+    res.render('login', {
+        title: 'Log - in'
+    });
+});
+
+//  POST login
+router.post('/login', function (req, res, next) {
+    passport.authenticate('local', {
+        successRedirect: '/',
+        failureRedirect: '/user/login',
+        failureFlash: true
+    })(req, res, next);
 });
 
 module.exports = router;

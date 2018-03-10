@@ -54,12 +54,22 @@
                             <% } %>
                         )</a>
                     </li>
-                    <li>
-                        <a href="/user/register">Register</a>
-                    </li>
-                    <li>
-                        <a href="/user/register">Log in</a>
-                    </li>
+                    <% if(user) { %>
+                        <li><a href="/user/logout"><b>Hi <%= user.username %></b> (Log out)</a></li>
+                    <% } else { %>
+                        <li>
+                            <a href="/user/register">Register</a>
+                        </li>
+                        <li>
+                            <a href="/user/login">Log in</a>
+                        </li>
+                    <% } %>
+
+                    <% if(user && user.admin == 1) { %>
+                        <li>
+                            <a href="/adminPages/pages">Admin area</a>
+                        </li>
+                    <% } %>
                 </ul>
             </div>
         </div>
