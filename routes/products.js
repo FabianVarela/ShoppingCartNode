@@ -1,11 +1,14 @@
 var express = require('express');
 var router = express.Router();
 var fs = require('fs-extra');
+var auth = require('../config/auth');
 var Product = require('../models/product');
 var Category = require('../models/category');
 
+var isUser = auth.isUser;
+
 //  GET retrieve all products
-router.get('/all', function (req, res) {
+router.get('/all', isUser, function (req, res) {
     Product.find(function (error, products) {
         if (error)
             console.log(error);
@@ -18,7 +21,7 @@ router.get('/all', function (req, res) {
 });
 
 //  GET retrieve a product by category
-router.get('/:category', function (req, res) {
+router.get('/:category', isUser, function (req, res) {
 
     var categorySlug = req.params.category;
 
@@ -36,7 +39,7 @@ router.get('/:category', function (req, res) {
 });
 
 //  GET retrieve a product details
-router.get('/:category/:product', function (req, res) {
+router.get('/:category/:product', isUser, function (req, res) {
 
     var galleryImages = null;
     var loggedIn = (req.isAuthenticated()) ? true : false;

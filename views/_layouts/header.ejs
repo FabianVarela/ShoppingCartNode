@@ -39,7 +39,7 @@
                         <% if(page.slug === "home") { %>
                             <li><a href="/"><%= page.title %></a></li>
                         <% } else { %>
-                            <li><a href="<%= page.slug %>"><%= page.title %></a></li>
+                            <li><a href="/<%= page.slug %>"><%= page.title %></a></li>
                         <% } %>
                     <% }); %>
                 </ul>
@@ -77,6 +77,14 @@
 
     <div class="container">
         <%- messages('messages', locals) %>
+
+        <% if(errors) { %>
+            <% errors.forEach(function(error) { %>
+                <div class="alert alert-danger">
+                    <%= error.msg %>
+                </div>
+            <% }); %>
+        <% } %>
 
         <div class="row">
             <div class="col-xs-12 col-md-3">

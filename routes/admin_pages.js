@@ -1,10 +1,13 @@
 var express = require('express');
 var router = express.Router();
+var auth = require('../config/auth');
 
 var Page = require('../models/page');
 
+var isAdmin = auth.isAdmin;
+
 //  GET pages
-router.get('/pages', function (req, res) {
+router.get('/pages', isAdmin, function (req, res) {
     Page.find({}).sort({ sorting: 1 }).exec(function (error, pages) {
         res.render('admin/pages', {
             title: 'All pages',
@@ -54,7 +57,7 @@ router.post('/pages/reorder-pages', function (req, res) {
 });
 
 //  GET add page
-router.get('/add', function (req, res) {
+router.get('/add', isAdmin, function (req, res) {
     var title = 'New page';
     var slug = '';
     var content = '';
@@ -125,7 +128,7 @@ router.post('/add', function (req, res) {
 });
 
 //  GET edit page
-router.get('/edit/:id', function (req, res) {
+router.get('/edit/:id', isAdmin, function (req, res) {
     Page.findById(req.params.id, function (error, page) {
         if (error)
             return console.log(error);
@@ -203,7 +206,7 @@ router.post('/edit/:id', function (req, res) {
 });
 
 //  DELETE delete page
-router.get('/delete/:id', function (req, res) {
+router.get('/delete/:id', isAdmin, function (req, res) {
     Page.findByIdAndRemove(req.params.id, function (error) {
         if (error)
             return console.log(error);
